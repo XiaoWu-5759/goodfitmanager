@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/api/v4/js/jquery.min.js"></script>
+</head>
+<body>
+
+<input type="text" id="name"/>
+<input type="text" id="pwd"/>
+<button onclick="login()">登录</button>
+
+
+</body>
+
+<script>
+    function login() {
+        var name = document.getElementById(name);
+
+        var request = {"username":name,"password":};
+        $.ajax(
+            {
+                url:"/api/v4/",
+                type:"post",
+                data: JSON.stringify(request),
+                contentType : "application/json"
+            }
+        )
+    }
+
+</script>
+</html>

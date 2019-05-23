@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simba.goodfitmanager.dao.FitChangeMapper">
+  <resultMap id="BaseResultMap" type="com.simba.goodfitmanager.pojo.FitChange">
+    <result column="old_icid" jdbcType="VARCHAR" property="oldIcid" />
+    <result column="new_icid" jdbcType="VARCHAR" property="newIcid" />
+    <result column="change_time" jdbcType="TIMESTAMP" property="changeTime" />
+    <result column="c_4s_id" jdbcType="INTEGER" property="c4sId" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    old_icid, new_icid, change_time, c_4s_id
+  </sql>
+  <select id="selectByExample" parameterType="com.simba.goodfitmanager.pojo.FitChangeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_fit_change
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.simba.goodfitmanager.pojo.FitChangeExample">
+    delete from t_fit_change
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.simba.goodfitmanager.pojo.FitChange">
+    insert into t_fit_change (old_icid, new_icid, change_time, 
+      c_4s_id)
+    values (#{oldIcid,jdbcType=VARCHAR}, #{newIcid,jdbcType=VARCHAR}, #{changeTime,jdbcType=TIMESTAMP}, 
+      #{c4sId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.simba.goodfitmanager.pojo.FitChange">
+    insert into t_fit_change
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="oldIcid != null">
+        old_icid,
+      </if>
+      <if test="newIcid != null">
+        new_icid,
+      </if>
+      <if test="changeTime != null">
+        change_time,
+      </if>
+      <if test="c4sId != null">
+        c_4s_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="oldIcid != null">
+        #{oldIcid,jdbcType=VARCHAR},
+      </if>
+      <if test="newIcid != null">
+        #{newIcid,jdbcType=VARCHAR},
+      </if>
+      <if test="changeTime != null">
+        #{changeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="c4sId != null">
+        #{c4sId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.simba.goodfitmanager.pojo.FitChangeExample" resultType="java.lang.Long">
+    select count(*) from t_fit_change
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_fit_change
+    <set>
+      <if test="record.oldIcid != null">
+        old_icid = #{record.oldIcid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.newIcid != null">
+        new_icid = #{record.newIcid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.changeTime != null">
+        change_time = #{record.changeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.c4sId != null">
+        c_4s_id = #{record.c4sId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_fit_change
+    set old_icid = #{record.oldIcid,jdbcType=VARCHAR},
+      new_icid = #{record.newIcid,jdbcType=VARCHAR},
+      change_time = #{record.changeTime,jdbcType=TIMESTAMP},
+      c_4s_id = #{record.c4sId,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

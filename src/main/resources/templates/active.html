@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/api/v4/js/jquery.min.js"></script>
+</head>
+<body>
+<input id="fitNum" type="text">
+<button onclick="active1()">激活</button>
+<br>
+<input id="fitNum1" type="text">
+<input id="fitNum2" type="text">
+<button onclick="active2()">替换</button>
+
+<!--<input id="fitNum" type="text">-->
+<!--<button id="One">提交2</button>-->
+
+
+<script>
+
+    function active1() {
+        var num = document.getElementById("fitNum").value;
+        // alert(num);
+        $.ajax(
+            {
+                url: "/api/v4/active/" + num,
+                method: "PUT",
+                success: function (response) {
+                    alert(response);
+                }
+            }
+        )
+    }
+
+    function active2() {
+        var num1 = document.getElementById("fitNum1").value;
+        var num2 = document.getElementById("fitNum2").value;
+        // alert(num);
+        $.ajax(
+            {
+                url: "/api/v4/active/" + num1 + "/" + num2,
+                method: "PUT",
+                success: function (response) {
+                    alert(response);
+                }
+            }
+        )
+    }
+
+    // $(function () {
+    //   $("#One").click()
+    //       $.ajax(
+    //           {
+    //               url: "/active/"+$("#fitNum").val(),
+    //               method:"POST",
+    //               success: function (result) {
+    //                   alert(result);
+    //               }
+    //           }
+    //       );
+    //
+    //
+    // })
+
+</script>
+</body>
+</html>

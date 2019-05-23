@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/api/v4/js/jquery.min.js"></script>
+</head>
+<body>
+
+<input type="text" id="updateIccid"/>
+<button onclick="update()">update</button>
+<br>
+
+<label>type:0</label>
+<button onclick="queryByType()">queryByType</button>
+<br>
+<label>iccid:123456789(模糊查询)</label>
+<button onclick="queryByIccid()">queryByIccid</button>
+
+<br>
+<form id="fileForm" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file"/>
+    <input onclick="uploadFile()" type="button" value="上传"/>
+</form>
+<div id="outputDiv"></div>
+
+<script>
+
+    function update() {
+        var updateIccid = document.getElementById("updateIccid").value;
+        $.ajax(
+            {
+                url: "/api/v4/manager/" + updateIccid,
+                method: "PUT",
+                data: JSON.stringify({
+                    type : 1
+                }),
+                contentType : "application/json",
+                success: function (response) {
+                    alert(response);
+                }
+            }
+        )
+    }
+
+    function queryByIccid() {
+
+        var jsonStr = {"pageNum":1,"pageSize":10};
+        $.ajax(
+            {
+                url: "/api/v4/manager/" + "icid" + "/" + "12345678",
+                method: "POST",
+                dataType: "json",
+                // date : JSON.stringify({
+                //   "pageNum" : 1,
+                //   "pageSize" : 10
+                // }),
+                contentType : "application/json",
+                data : JSON.stringify(jsonStr),
+                success: function (response) {
+                    alert(response);
+                }
+            }
+        )
+    }
+
+    function queryByType() {
+
+        var jsonStr = {"pageNum":1,"pageSize":10};
+        $.ajax(
+            {
+                url: "/api/v4/manager/" + "type" + "/" + "0",
+                method: "POST",
+                dataType:'json',
+                // JSON.strngify 必须要
+                data : JSON.stringify(jsonStr),
+                // data:jsonStr,
+                contentType : "application/json",
+                success: function (response) {
+                    alert(response);
+                }
+            }
+        )
+    }
+
+    function uploadFile() {
+        var fileForm = new FormData(document.getElementById("fileForm"));
+        // var fileForm=$('#fileForm').serialize();
+        $.ajax(
+                {
+                    url: "/api/v4/manager/fit",
+                    data: fileForm,  // 这里就是excel文件数据
+                    method: "POST",
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        $("#outputDiv").html(response);
+                    }
+                }
+            )
+    }
+
+
+</script>
+</body>
+</html>
