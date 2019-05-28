@@ -1,4 +1,4 @@
-package com.simba.goodfitmanager.util;
+package com.simba.goodfitmanager.utils;
 
 //import org.apache.poi.ss.usermodel.*;
 

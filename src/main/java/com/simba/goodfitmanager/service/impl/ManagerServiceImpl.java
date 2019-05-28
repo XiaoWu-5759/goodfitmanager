@@ -8,7 +8,7 @@ import com.simba.goodfitmanager.dao.FitMapper;
 import com.simba.goodfitmanager.pojo.Fit;
 import com.simba.goodfitmanager.pojo.FitExample;
 import com.simba.goodfitmanager.service.ManagerService;
-import com.simba.goodfitmanager.util.ExcelUtil;
+import com.simba.goodfitmanager.utils.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -34,7 +34,7 @@ public class LoginController {
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public Response register(@RequestBody Map<String,Object> map){
         // json数据判空操作
-        if (map.get("accountName") == null && map.get("password") == null && map.get("role") == null) {
+        if (map.get("accountName") == null || map.get("password") == null || map.get("role") == null) {
             return ResponseGenerator.genIllegalArgumentReponse();
         }
         String accountName = map.get("accountName").toString();

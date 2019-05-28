@@ -79,4 +79,61 @@ public class ResponseGenerator {
         return response;
     }
 
+    public static <T> Response<T> genUserNeedAuthoritiesReponse() {
+        Response response = new Response();
+        response.setCode(ResponseCode.RESPONSE_CODE_BAD_REQUEST);
+        response.setStatus(ResponseStatus.USER_NEED_AUTHORITIES.getStatus());
+        response.setMsg(ResponseStatus.USER_NEED_AUTHORITIES.getDesc());
+        return response;
+    }
+
+    public static <T> Response<T> genUserLoginFailedReponse() {
+        Response response = new Response();
+        response.setCode(ResponseCode.RESPONSE_CODE_SUCCESS);
+        response.setStatus(ResponseStatus.USER_LOGIN_FAILED.getStatus());
+        response.setMsg(ResponseStatus.USER_LOGIN_FAILED.getDesc());
+        return response;
+    }
+
+    public static <T> Response<T> genUserLoginSuccessReponse(Object result) {
+        Response response = new Response();
+        response.setCode(ResponseCode.RESPONSE_CODE_SUCCESS);
+        response.setStatus(ResponseStatus.USER_LOGIN_SUCCESS.getStatus());
+        response.setMsg(ResponseStatus.USER_LOGIN_SUCCESS.getDesc());
+        response.setResult(result);
+        return response;
+    }
+
+    public static <T> Response<T> genUserNoAccessReponse() {
+        Response response = new Response();
+        response.setCode(ResponseCode.RESPONSE_CODE_BAD_REQUEST);
+        response.setStatus(ResponseStatus.USER_NO_ACCESS.getStatus());
+        response.setMsg(ResponseStatus.USER_NO_ACCESS.getDesc());
+        return response;
+    }
+
+    public static <T> Response<T> genUserLogoutSuccessReponse() {
+        Response response = new Response();
+        response.setCode(ResponseCode.RESPONSE_CODE_BAD_REQUEST);
+        response.setStatus(ResponseStatus.USER_LOGOUT_SUCCESS.getStatus());
+        response.setMsg(ResponseStatus.USER_LOGOUT_SUCCESS.getDesc());
+        return response;
+    }
+
+    public static <T> Response<T> genTokenIsBlacklistReponse() {
+        Response response = new Response();
+        response.setCode(ResponseCode.RESPONSE_CODE_BAD_REQUEST);
+        response.setStatus(ResponseStatus.TOKEN_IS_BLACKLIST.getStatus());
+        response.setMsg(ResponseStatus.TOKEN_IS_BLACKLIST.getDesc());
+        return response;
+    }
+
+    public static <T> Response<T> genLoginIsOverdueReponse() {
+        Response response = new Response();
+        response.setCode(ResponseCode.RESPONSE_CODE_BAD_REQUEST);
+        response.setStatus(ResponseStatus.LOGIN_IS_OVERDUE.getStatus());
+        response.setMsg(ResponseStatus.LOGIN_IS_OVERDUE.getDesc());
+        return response;
+    }
+
 }

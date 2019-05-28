@@ -9,6 +9,8 @@ public class Response<T> implements Serializable {  //序列化
     private String msg;
     private T result;
 
+    // TODO: 如何将Response result是null的时候，自动消除
+
     public Response() {
     }
 
