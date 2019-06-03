@@ -1,8 +1,8 @@
 package com.simba.goodfitmanager.config;
 
-import com.simba.goodfitmanager.filter.SelfAuthenticationFilter;
 import com.simba.goodfitmanager.filter.SelfAuthorizationFilter;
 import com.simba.goodfitmanager.security.*;
+import com.simba.goodfitmanager.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +17,14 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 
 @Configuration
@@ -44,8 +52,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     // 因为UserDetailsService的实现类实在太多啦，这里设置一下我们要注入的实现类
-    @Qualifier("userDetailsServiceImpl")
-    UserDetailsService userDetailsService; // 自定义user
+//    @Qualifier("userDetailsServiceImpl")
+    UserDetailsServiceImpl userDetailsService; // 自定义user
+
+    @Autowired
+    SelfAuthorizationFilter selfAuthorizationFilter;
 
     // 信息加密
     @Bean
@@ -72,11 +83,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()  // 关闭防跨站伪请求攻击，默认启用
+                .cors()
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // 不需要session
 
                 .and()
                 .authorizeRequests()  // 该方法所返回的对象的方法来配置请求级别的安全细节
-                    .antMatchers("/auth/**").permitAll()  // 对于登录注册，全部开放
+                    .antMatchers("/auth/register").permitAll()  // 对于登录注册，全部开放
                     .antMatchers("/tasks/**").authenticated()  // 只有登录用户才能访问
                     .antMatchers("/active/**").authenticated()
                     .antMatchers("/manager/**").hasAuthority("ROLE_ADMIN")
@@ -85,15 +98,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.DELETE, "/tasks/**").hasAuthority("ROLE_ADMIN")
                     .anyRequest().permitAll()  //其余的都通过
 
-//                .and()
-//                    .formLogin()//配置登录页面
-////                    .loginPage("/auth/login")//登录页面的访问路径
+                .and()
+                    .formLogin()//配置登录页面
+                    .loginProcessingUrl("/auth/login")
+//                    .loginPage("/auth/login")//登录页面的访问路径
 ////                    .loginProcessingUrl("/check")//登录页面下表单提交的路径
 ////                    .failureUrl("/login")//登录失败后跳转的路径
 ////                    .defaultSuccessUrl("/show")//登录成功后默认跳转的路径
-//                    .successHandler(authenticationSuccessHandler) // 登录成功
-//                    .failureHandler(authenticationFailureHandler) // 登录失败
-//                    .permitAll()
+                    .successHandler(authenticationSuccessHandler) // 登录成功
+                    .failureHandler(authenticationFailureHandler) // 登录失败
+                    .permitAll()
 
                 .and()
                     .logout()//用户退出操作
@@ -105,10 +119,20 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // 配置拦截器
                 .and()
-                    .addFilter(new SelfAuthenticationFilter(authenticationManager()))
-                    .addFilter(new SelfAuthorizationFilter(authenticationManager()))
-                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+//                    .addFilter(new SelfAuthenticationFilter(authenticationManager()))
+//                    .addFilter(new SelfAuthorizationFilter(authenticationManager()))
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
 
-        ;
+                .and()
+                .addFilterBefore(selfAuthorizationFilter, BasicAuthenticationFilter.class);
+    }
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

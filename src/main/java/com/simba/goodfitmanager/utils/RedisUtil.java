@@ -3,6 +3,7 @@ package com.simba.goodfitmanager.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,12 @@ public class RedisUtil {
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+//    private RedisTemplate<String,Object> redisTemplate = new  RedisTemplate<>();
+
+//    @Autowired
+//    public RedisUtil(StringRedisTemplate redisTemplate){
+//        this.redisTemplate = redisTemplate;
+//    }
 
     /**
      * 查询key,支持模糊查询
@@ -95,8 +102,16 @@ public class RedisUtil {
      * @param expire 过期时间（毫秒计）
      */
     public void hset(String key,String filed,Object domain,Integer expire){
+//        if (redisTemplate != null) {
+//
+//            redisTemplate.opsForHash().put(key, filed, domain);
+//            redisTemplate.expire(key, expire,TimeUnit.SECONDS);
+//        }
+//        System.out.println("redisTemplate为空");
+//        return ;
         redisTemplate.opsForHash().put(key, filed, domain);
         redisTemplate.expire(key, expire,TimeUnit.SECONDS);
+
     }
 
     /**
@@ -182,7 +197,7 @@ public class RedisUtil {
      * @param token
      */
     public void addBlackList(String token){
-        hset("blacklist", token,"true");
+        hset("blacklist", token,DateUtil.getTime());
     }
 
 
@@ -226,11 +241,25 @@ public class RedisUtil {
         return redisTemplate.opsForHash().get(token, "expirationTime");
     }
 
-    public void setTokenRefresh(String token,String username,String ip){
-        //刷新时间
-        Integer expire = validTime*24*60*60*1000;
+    public void setToken(String token,String username,String ip){
+//        设置在redis的有效时间
+        Integer expire = validTime*24*60*60;
+//        Integer expire = 60;
 
+        System.out.println(validTime+expirationSeconds+expire+username+ip);
         hset(token, "tokenValidTime",DateUtil.getAddDayTime(validTime),expire);
+        hset(token, "expirationTime",DateUtil.getAddDaySecond(expirationSeconds),expire);
+        hset(token, "username",username,expire);
+        hset(token, "ip",ip,expire);
+//        hset("blacklist", token,DateUtil.getTime());
+
+    }
+
+    public void setTokenRefresh(String token,String username,String ip,String refreshValidTime ){
+        //设置在redis的有效时间
+        Integer expire = Integer.valueOf(refreshValidTime)*24*60*60;
+
+        hset(token, "tokenValidTime",refreshValidTime,expire);
         hset(token, "expirationTime",DateUtil.getAddDaySecond(expirationSeconds),expire);
         hset(token, "username",username,expire);
         hset(token, "ip",ip,expire);

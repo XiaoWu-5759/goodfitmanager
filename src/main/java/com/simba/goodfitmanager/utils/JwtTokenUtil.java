@@ -44,20 +44,31 @@ public class JwtTokenUtil {
 //     * @param claims 自定义身份信息
 //     * @return
 //     */
-    public static String generateToken(String username, String role, boolean isRememberMe) {
-        long expirationSeconds = isRememberMe ? EXPIRATION_REMEMBER : EXPIRATION;
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(ROLE_CLAIMS, role);
+//    public static String generateToken(String username, String role, boolean isRememberMe) {
+//        long expirationSeconds = isRememberMe ? EXPIRATION_REMEMBER : EXPIRATION;
+//        Map<String, Object> claims = new HashMap<>();
+//        claims.put(ROLE_CLAIMS, role);
+//
+//        return Jwts.builder()
+//                .signWith(SignatureAlgorithm.HS512, SECRET)
+//                .setClaims(claims)
+//                .setIssuer(ISS)
+//                .setSubject(username)
+//                .setIssuedAt(new Date())
+//                .setExpiration(new Date(System.currentTimeMillis() + expirationSeconds * 1000))
+////                .signWith(SignatureAlgorithm.HS512, salt) // 不使用公钥私钥
+////                .signWith(SignatureAlgorithm.RS256, privateKey)
+//                .compact();
+//    }
 
+    public static String generateToken(String subject, int expirationSeconds, Map<String,Object> claims){
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .setClaims(claims)
+                .setSubject(subject)
                 .setIssuer(ISS)
-                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationSeconds * 1000))
-//                .signWith(SignatureAlgorithm.HS512, salt) // 不使用公钥私钥
-//                .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
     }
 
@@ -91,24 +102,24 @@ public class JwtTokenUtil {
     }
 
     //获取token自定义属性
-//    public static Map<String,Object> getClaims(String token){
-//        Map<String,Object> claims = null;
-//        try {
-//            claims = getTokenBody(token);
-//        }catch (Exception e) {
-//        }
-//
-//        return claims;
-//    }
-    public static String getUserRole(String token) {
-        String role = null;
-        try{
-            role = (String) getTokenBody(token).get(ROLE_CLAIMS);
-        }catch (Exception e){
+    public static Map<String,Object> getClaims(String token){
+        Map<String,Object> claims = null;
+        try {
+            claims = getTokenBody(token);
+        }catch (Exception e) {
             e.printStackTrace();
         }
-        return role;
+        return claims;
     }
+//    public static String getUserRole(String token) {
+//        String role = null;
+//        try{
+//            role = (String) getTokenBody(token).get(ROLE_CLAIMS);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//        return role;
+//    }
 
 
     private static Claims getTokenBody(String token){

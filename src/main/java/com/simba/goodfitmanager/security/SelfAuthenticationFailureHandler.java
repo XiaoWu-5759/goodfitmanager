@@ -2,7 +2,6 @@ package com.simba.goodfitmanager.security;
 
 import com.alibaba.fastjson.JSON;
 import com.simba.goodfitmanager.common.ResponseGenerator;
-import com.simba.goodfitmanager.filter.SelfAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
@@ -24,9 +23,9 @@ public class SelfAuthenticationFailureHandler implements AuthenticationFailureHa
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-////        logger.info("登录失败unsuccessfulAuthentication:"+loginUser.toString());
-//        logger.info("登录失败unsuccessfulAuthentication:"+httpServletRequest.getInputStream().toString());
-//        httpServletResponse.getWriter().write(JSON.toJSONString(ResponseGenerator.genUserLoginFailedReponse()));
+//        logger.info("登录失败unsuccessfulAuthentication:"+loginUser.toString());
+        logger.info("登录失败unsuccessfulAuthentication:"+httpServletRequest.getInputStream().toString());
+        httpServletResponse.getWriter().write(JSON.toJSONString(ResponseGenerator.genUserLoginFailedReponse()));
 
     }
 }
