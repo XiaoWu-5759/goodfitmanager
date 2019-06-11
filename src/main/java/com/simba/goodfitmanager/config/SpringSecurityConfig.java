@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
@@ -94,6 +95,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/active/**").authenticated()
                     .antMatchers("/manager/**").hasAuthority("ROLE_ADMIN")
                     .antMatchers("/unbind/**").hasAuthority("ROLE_ADMIN")
+                    .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                     // 只有管理员权限才能删除
                     .antMatchers(HttpMethod.DELETE, "/tasks/**").hasAuthority("ROLE_ADMIN")
                     .anyRequest().permitAll()  //其余的都通过
@@ -130,7 +132,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedMethods(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

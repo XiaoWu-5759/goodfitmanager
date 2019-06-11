@@ -29,6 +29,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         User user = null;
         try{
+            System.out.println("username:"+username);
             user = userMapper.getUser(username);
             if (user == null) {
                 throw new UsernameNotFoundException("该用户不存在");
